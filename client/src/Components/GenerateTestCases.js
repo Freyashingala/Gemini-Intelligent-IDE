@@ -6,11 +6,9 @@ const GenerateTestCases = ({ editorRef, setTestOutput, language }) => {
         if (!editorRef.current) return;
 
         const currentCode = editorRef.current.getValue();
-        console.log("Generating Tests for Code:", currentCode);
 
         try {
             const testCases = await getTestCases(currentCode, language);
-            console.log("Generated Test Cases:", testCases);
 
             setTestOutput(testCases);
         } catch (error) {
