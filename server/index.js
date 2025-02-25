@@ -25,11 +25,13 @@ app.use(cors({
     credentials: true,
 }));
 
+const cors = require("cors");
+
 app.use(express.json());
 app.use(express.static('public'));
 
 // Initialize Google Gemini AI
-const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
+const genAI = new GoogleGenerativeAI(process.env.REACT_APP_GOOGLE_API_KEY);
 app.set('genAI', genAI); // Store in app locals for global access
 
 app.use("/auth", authRoutes);
