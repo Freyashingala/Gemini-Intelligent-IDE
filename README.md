@@ -1,5 +1,3 @@
-# Inter IIT Bootcamp Dev Task
-
 ## Setup
 - Clone the repository
 - To start client, run the following commands
