@@ -22,8 +22,8 @@ export const getRealTimeCodeSuggestion = (code) =>
     callGeminiAPI(`Suggest the next line of code for:\n\n${code} without Markdown formatting or explanations.`);
 
 // Function to get AI-powered bug fixes
-export const debugCode = (code) => 
-    callGeminiAPI(`Fix the bugs in the following code:\n\n${code} without Markdown formatting or explanations or \`\`\`.`);
+export const debugCode = (code, language) => 
+    callGeminiAPI(`Debug the following code:\n\n${code} without Markdown formatting or explanations or \`\`\`. Make sure that the language of the code is ${language}, if not output "please choose language as <language in which the code is written>. The possible languages are Javascript, pyhton, C++, Java, HTML, CSS.`);
 
 // Function to generate test cases for the given code
 export const getTestCases = (code) => 

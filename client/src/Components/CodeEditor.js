@@ -74,6 +74,12 @@ const CodeEditor = () => {
         });
     }
 
+    const applyFix = () => {
+        if (editorRef.current && debugOutput) {
+            editorRef.current.setValue(debugOutput);
+        }
+    };
+
     return (
         <div className="code-editor-wrapper">
             <div className="editor-header">
@@ -117,16 +123,19 @@ const CodeEditor = () => {
             </div>
             <div>
                 <div className="debugger">
-                        <Debugger editorRef={editorRef} setDebugOutput={setDebugOutput} />
+                        <Debugger editorRef={editorRef} setDebugOutput={setDebugOutput} language={language}/>
                 </div>
                 <div className="debugger">
-                    <GenerateTestCases editorRef={editorRef} setTestOutput={setTestOutput} language={language}/>
+                    <GenerateTestCases editorRef={editorRef} setTestOutput={setTestOutput} />
                 </div>
             </div>
             <div className="output-container">
                 <div className="output-window">
                     <h3>Debugged Code</h3>
                     <pre>{debugOutput || "Click 'Debug Code' to see results."}</pre>
+                    {debugOutput && (
+                        <button onClick={applyFix}>Apply Fix</button>
+                    )}
                 </div>
                 <div className="output-window">
                     <h3>Generated Test Cases</h3>
