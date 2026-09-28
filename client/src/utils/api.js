@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
-const BASE_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${API_KEY}`;
+const BASE_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${API_KEY}`;
 
 // General function to make API calls
 const callGeminiAPI = async (prompt) => {
