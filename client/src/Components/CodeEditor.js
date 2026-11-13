@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import Editor from "@monaco-editor/react";
 import debounce from "lodash.debounce";
 import "../css/CodeEditor.css";
@@ -24,9 +24,8 @@ const CodeEditor = () => {
     };
 
     // 1. Create a stable debounced function that persists across renders
-    const fetchSuggestion = useCallback(
-        debounce(async (value) => {
-            // Ignore empty strings AND the initial placeholder text
+    const fetchSuggestion = useMemo(
+        () => debounce(async (value) => {
             if (value.trim().length > 0 && value !== "// Type your code here...") {
                 try {
                     const aiSuggestion = await getRealTimeCodeSuggestion(value);
@@ -38,10 +37,9 @@ const CodeEditor = () => {
             } else {
                 setSuggestion("");
             }
-        }, 1500), // 1500ms (1.5s) is much safer for strict free-tier quotas than 500ms
-        [] // Empty dependency array ensures this debounce instance is never recreated
+        }, 1500),
+        [] 
     );
-
     // 2. Trigger the stable debounced function when 'code' changes
     useEffect(() => {
         fetchSuggestion(code);
