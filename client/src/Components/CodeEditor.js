@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Editor from "@monaco-editor/react";
 import debounce from "lodash.debounce";
 import "../css/CodeEditor.css";
@@ -23,20 +23,32 @@ const CodeEditor = () => {
         setLanguage(event.target.value);
     };
 
-    useEffect(() => {
-        const debouncedFetchSuggestion = debounce(async (value) => {
-            if (value.trim().length > 0) {
-                const aiSuggestion = await getRealTimeCodeSuggestion(value);
-                setSuggestion(aiSuggestion);
+    // 1. Create a stable debounced function that persists across renders
+    const fetchSuggestion = useCallback(
+        debounce(async (value) => {
+            // Ignore empty strings AND the initial placeholder text
+            if (value.trim().length > 0 && value !== "// Type your code here...") {
+                try {
+                    const aiSuggestion = await getRealTimeCodeSuggestion(value);
+                    setSuggestion(aiSuggestion);
+                } catch (error) {
+                    console.error("Failed to fetch suggestion:", error);
+                    setSuggestion("");
+                }
             } else {
                 setSuggestion("");
             }
-        }, 500);
+        }, 1500), // 1500ms (1.5s) is much safer for strict free-tier quotas than 500ms
+        [] // Empty dependency array ensures this debounce instance is never recreated
+    );
 
-        debouncedFetchSuggestion(code);
-
-        return () => debouncedFetchSuggestion.cancel(); // Cleanup to prevent memory leaks
-    }, [code]);
+    // 2. Trigger the stable debounced function when 'code' changes
+    useEffect(() => {
+        fetchSuggestion(code);
+        
+        // Cleanup the timer if the component unmounts
+        return () => fetchSuggestion.cancel();
+    }, [code, fetchSuggestion]);
 
     const handleEditorDidMount = (editor, monaco) => {
         editorRef.current = editor;
