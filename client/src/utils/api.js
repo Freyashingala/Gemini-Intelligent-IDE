@@ -12,7 +12,7 @@ const callGeminiAPI = async (prompt) => {
 
         return response.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
     } catch (error) {
-        console.error("Error calling Gemini API:", error);
+        console.error("Error calling Gemini API:", error.message);
         return "";
     }
 };
